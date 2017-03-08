@@ -10,8 +10,8 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
     redirect_uri: System.get_env("FLICKR_REDIRECT_URI")
   """
 
-  def access_token({token, token_secret}, verifier, _opts \\ []) do
-    Flickrex.fetch_access_token(client(), token, token_secret, verifier)
+  def access_token(request, verifier, _opts \\ []) do
+    Flickrex.fetch_access_token(client(), request, verifier)
   end
 
   def access_token!(access_token, verifier, opts \\ []) do
@@ -23,6 +23,11 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
 
   def authorize_url!(token, params \\ []) do
     Flickrex.get_authorize_url(token, params)
+  end
+
+  def get_info(access_token) do
+    client = client() |> Flickrex.put_access_token(access_token)
+    Flickr.People.get_info(client, user_id: access_token.user_nsid)
   end
 
   defp client do
