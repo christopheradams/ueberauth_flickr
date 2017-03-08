@@ -3,7 +3,7 @@ defmodule Ueberauth.Strategy.Flickr do
   Flickr Strategy for Überauth.
   """
 
-  use Ueberauth.Strategy
+  use Ueberauth.Strategy, default_perms: nil
 
   alias Ueberauth.Auth.Info
   alias Ueberauth.Auth.Credentials

@@ -11,7 +11,7 @@ defmodule UeberauthFlickr.Mixfile do
   end
 
   def application do
-    [extra_applications: [:logger]]
+    [extra_applications: [:logger, :plug]]
   end
 
   defp deps do
