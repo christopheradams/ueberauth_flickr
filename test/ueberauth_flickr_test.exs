@@ -46,6 +46,11 @@ defmodule UeberauthFlickrTest do
     assert %Flickrex.Schema.Access{} = auth.extra.raw_info[:token]
   end
 
+  @tag path: "/auth/flickr/callback?oauth_verifier=BAD_VERIFIER", request: %Client.Request{}
+  test "handle callback with bad verifier", %{conn: %{assigns: %{ueberauth_failure: failure}}} do
+    assert failure.errors |> List.first |> Map.get(:message_key) == "access_error"
+  end
+
   @tag path: "/auth/flickr/callback"
   test "handle callback with no code", %{conn: %{assigns: assigns}} do
     assert %Ueberauth.Failure{} = assigns[:ueberauth_failure]

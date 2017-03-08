@@ -38,7 +38,7 @@ defmodule Ueberauth.Strategy.Flickr do
     request = get_session(conn, :flickr_request)
     case OAuth.access_token(request, oauth_verifier) do
       {:ok, access_token} -> fetch_user(conn, access_token)
-      {:error, error} -> set_errors!(conn, [error(error.code, error.reason)])
+      {:error, reason} -> set_errors!(conn, [error("access_error", reason)])
     end
   end
 
