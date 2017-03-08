@@ -9,7 +9,7 @@ defmodule Ueberauth.Strategy.Flickr do
   alias Ueberauth.Auth.Credentials
   alias Ueberauth.Auth.Extra
 
-  alias Ueberauth.Strategy.Flickr
+  alias Ueberauth.Strategy.Flickr.OAuth
 
   @doc """
   Handles initial request for Flickr authentication
@@ -23,12 +23,12 @@ defmodule Ueberauth.Strategy.Flickr do
         perms -> [perms: perms]
       end
 
-    request = Flickr.OAuth.request_token!([], [redirect_uri: callback_url(conn)])
+    request = OAuth.request_token!([], [redirect_uri: callback_url(conn)])
 
     conn
     |> put_session(:flickr_request, request)
     |> put_session(:flickr_perms, perms)
-    |> redirect!(Flickr.OAuth.authorize_url!(request, params))
+    |> redirect!(OAuth.authorize_url!(request, params))
   end
 
   @doc """
@@ -36,7 +36,7 @@ defmodule Ueberauth.Strategy.Flickr do
   """
   def handle_callback!(%Plug.Conn{params: %{"oauth_verifier" => oauth_verifier}} = conn) do
     request = get_session(conn, :flickr_request)
-    case Flickr.OAuth.access_token(request, oauth_verifier) do
+    case OAuth.access_token(request, oauth_verifier) do
       {:ok, access_token} -> fetch_user(conn, access_token)
       {:error, error} -> set_errors!(conn, [error(error.code, error.reason)])
     end
@@ -105,7 +105,7 @@ defmodule Ueberauth.Strategy.Flickr do
   end
 
   defp fetch_user(conn, access_token) do
-    case Flickr.OAuth.get_info(access_token) do
+    case OAuth.get_info(access_token) do
       {:ok, person} ->
         conn
         |> put_private(:flickr_user, person)
