@@ -27,6 +27,7 @@ defmodule Ueberauth.Strategy.Flickr do
 
     conn
     |> put_session(:flickr_request, request)
+    |> put_session(:flickr_perms, perms)
     |> redirect!(Flickr.OAuth.authorize_url!(request, params))
   end
 
@@ -51,6 +52,7 @@ defmodule Ueberauth.Strategy.Flickr do
     conn
     |> put_private(:flickr_user, nil)
     |> put_private(:flickr_access, nil)
+    |> put_session(:flickr_perms, nil)
     |> put_session(:flickr_request_token, nil)
     |> put_session(:flickr_request_token_secret, nil)
   end
@@ -68,8 +70,9 @@ defmodule Ueberauth.Strategy.Flickr do
   def credentials(conn) do
     token = conn.private.flickr_access.oauth_token
     secret = conn.private.flickr_access.oauth_token_secret
+    perms = get_session(conn, :flickr_perms)
 
-    %Credentials{token: token, secret: secret}
+    %Credentials{token: token, secret: secret, scopes: [perms]}
   end
 
   @doc """
