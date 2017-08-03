@@ -1,7 +1,7 @@
 use Mix.Config
 
 if Mix.env == :test do
-  config :flickrex, :oauther, Flickrex.OAuth.Mock
+  config :flickrex, :oauther, UeberauthFlickr.Support.OAuthMock
 
   config :ueberauth, Ueberauth,
     providers: [
