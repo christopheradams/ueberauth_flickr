@@ -1,9 +1,6 @@
 defmodule Ueberauth.Strategy.Flickr.OAuthTest do
   use ExUnit.Case, async: true
 
-  alias Flickrex.Client
-  alias Flickrex.Schema
-
   alias Ueberauth.Strategy.Flickr.OAuth
 
   setup do
@@ -14,34 +11,70 @@ defmodule Ueberauth.Strategy.Flickr.OAuthTest do
   end
 
   test "access token" do
-    assert {:ok, %Schema.Access{}} = OAuth.access_token(%Client.Request{}, nil)
+    {:ok, access_token} = OAuth.access_token("TOKEN", "SECRET", "VERIFIER")
+
+    assert access_token ==
+      %{fullname: "FULL NAME", oauth_token: "TOKEN",
+        oauth_token_secret: "SECRET", user_nsid: "NSID",
+        username: "USERNAME"}
   end
 
   test "access token!" do
-    assert %Schema.Access{} = OAuth.access_token!(%Client.Request{}, nil)
+    access_token = OAuth.access_token!("TOKEN", "SECRET", "VERIFIER")
+
+    assert access_token ==
+      %{fullname: "FULL NAME", oauth_token: "TOKEN",
+        oauth_token_secret: "SECRET", user_nsid: "NSID",
+        username: "USERNAME"}
   end
 
   test "authorize url" do
-    auth_url = OAuth.authorize_url!(%Client.Request{})
-    assert auth_url == "https://api.flickr.com/services/oauth/authorize?oauth_token="
+    auth_url = OAuth.authorize_url!("TOKEN")
+    assert auth_url == "https://api.flickr.com/services/oauth/authorize?oauth_token=TOKEN"
   end
 
   test "get authorize url with perms" do
-    auth_url = OAuth.authorize_url!(%Client.Request{}, perms: "delete")
-    assert auth_url == "https://api.flickr.com/services/oauth/authorize?oauth_token=&perms=delete"
+    auth_url = OAuth.authorize_url!("TOKEN", perms: "delete")
+    assert auth_url == "https://api.flickr.com/services/oauth/authorize?oauth_token=TOKEN&perms=delete"
   end
 
   test "get info" do
-    assert {:ok, _info} = OAuth.get_info(%Schema.Access{})
+    access_token =
+      %{fullname: "FULL NAME", oauth_token: "TOKEN",
+        oauth_token_secret: "SECRET", user_nsid: "NSID",
+        username: "USERNAME"}
+
+    {:ok, info} = OAuth.get_info(access_token)
+
+    assert info == %{
+      "stat" => "ok",
+      "user" => %{
+        "id" => "USERID",
+        "nsid" => "NSID",
+        "username" => %{
+          "_content" => "USERNAME"
+        }
+      }
+    }
   end
 
   test "request token" do
-    token = OAuth.request_token([], [redirect_uri: "http://localhost/test"])
-    assert {:ok, %Client.Request{}} = token
+    {:ok, token} = OAuth.request_token(redirect_uri: "http://localhost/test")
+
+    assert token == %{
+      oauth_callback_confirmed: true,
+      oauth_token: "TOKEN",
+      oauth_token_secret: "TOKEN_SECRET"
+    }
   end
 
   test "request token!" do
-    token = OAuth.request_token!([], [redirect_uri: "http://localhost/test"])
-    assert %Client.Request{} = token
+    token = OAuth.request_token!(redirect_uri: "http://localhost/test")
+
+    assert token == %{
+      oauth_callback_confirmed: true,
+      oauth_token: "TOKEN",
+      oauth_token_secret: "TOKEN_SECRET"
+    }
   end
 end

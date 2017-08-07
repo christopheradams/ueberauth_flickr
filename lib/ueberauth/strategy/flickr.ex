@@ -23,12 +23,12 @@ defmodule Ueberauth.Strategy.Flickr do
         perms -> [perms: perms]
       end
 
-    request = OAuth.request_token!([], [redirect_uri: callback_url(conn)])
+    request = OAuth.request_token!(redirect_uri: callback_url(conn))
 
     conn
     |> put_session(:flickr_request, request)
     |> put_session(:flickr_perms, perms)
-    |> redirect!(OAuth.authorize_url!(request, params))
+    |> redirect!(OAuth.authorize_url!(request.oauth_token, params))
   end
 
   @doc """
@@ -36,7 +36,7 @@ defmodule Ueberauth.Strategy.Flickr do
   """
   def handle_callback!(%Plug.Conn{params: %{"oauth_verifier" => oauth_verifier}} = conn) do
     request = get_session(conn, :flickr_request)
-    case OAuth.access_token(request, oauth_verifier) do
+    case OAuth.access_token(request.oauth_token, request.oauth_token_secret, oauth_verifier) do
       {:ok, access_token} -> fetch_user(conn, access_token)
       {:error, reason} -> set_errors!(conn, [error("access_error", reason)])
     end

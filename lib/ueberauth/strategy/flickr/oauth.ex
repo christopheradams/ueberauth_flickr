@@ -10,46 +10,86 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
     redirect_uri: System.get_env("FLICKR_REDIRECT_URI")
   """
 
-  def access_token(request, verifier, _opts \\ []) do
-    Flickrex.fetch_access_token(client(), request, verifier)
+  def access_token(token, secret, verifier, opts \\ []) do
+    config = config(opts)
+
+    operation = Flickrex.Auth.access_token(token, secret, verifier)
+    response = Flickrex.request(operation, config)
+
+    case response do
+      {:ok, %{body: body}} ->
+        {:ok, body}
+      error ->
+        error
+    end
   end
 
-  def access_token!(access_token, verifier, opts \\ []) do
-    case access_token(access_token, verifier, opts) do
-      {:ok, token} -> token
-      {:error, error} -> raise error
+  def access_token!(token, secret, verifier, opts \\ []) do
+    case access_token(token, secret, verifier, opts) do
+      {:ok, token} ->
+        token
+      error ->
+        raise RuntimeError, """
+        UeberauthFlickr Error
+
+        #{inspect error}
+        """
     end
   end
 
   def authorize_url!(token, params \\ []) do
-    Flickrex.get_authorize_url(token, params)
+    token
+    |> Flickrex.Auth.authorize_url(params)
+    |> Flickrex.request!()
   end
 
   def get_info(access_token) do
-    client = client() |> Flickrex.put_access_token(access_token)
-    Flickr.People.get_info(client, user_id: access_token.user_nsid)
+    params = [user_id: access_token.user_nsid]
+
+    response =
+      params
+      |> Flickrex.Flickr.People.get_info()
+      |> Flickrex.request(access_token)
+
+    case response do
+      {:ok, %{body: body}} ->
+        {:ok, body}
+      error ->
+        error
+    end
   end
 
-  defp client do
-    Flickrex.new(config())
-  end
-
-  defp config(opts \\ []) do
+  defp config(opts) do
     Keyword.merge(Application.get_env(:ueberauth, __MODULE__), opts)
   end
 
-  def request_token(params \\ [], opts \\ []) do
+  def request_token(opts \\ []) do
     config = config(opts)
-    oauth_callback = Keyword.get(opts, :redirect_uri, config[:redirect_uri])
-    params = [{:oauth_callback, oauth_callback} | params]
+    params = [oauth_callback: config[:redirect_uri]]
 
-    Flickrex.fetch_request_token(client(), params)
+    response =
+      params
+      |> Flickrex.Auth.request_token()
+      |> Flickrex.request(config)
+
+    case response do
+      {:ok, %{body: body}} ->
+        {:ok, body}
+      error ->
+        error
+    end
   end
 
-  def request_token!(params \\ [], opts \\ []) do
-    case request_token(params, opts) do
-      {:ok, token} -> token
-      {:error, error} -> raise error
+  def request_token!(opts \\ []) do
+    case request_token(opts) do
+      {:ok, token} ->
+        token
+      error ->
+        raise RuntimeError, """
+        UeberauthFlickr Error
+
+        #{inspect error}
+        """
     end
   end
 end
