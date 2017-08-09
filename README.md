@@ -17,7 +17,7 @@ _Note_: Sessions are required for this strategy.
 
     ```elixir
     def deps do
-      [{:ueberauth_flicker, "~> 0.1"}]
+      [{:ueberauth_flicker, "~> 0.2"}]
     end
     ```
 

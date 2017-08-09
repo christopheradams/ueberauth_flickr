@@ -5,12 +5,12 @@ defmodule UeberauthFlickr.Mixfile do
   Flickr strategy for Überauth
   """
 
-  @version "0.1.0"
+  @version "0.2.0"
   @source_url "https://github.com/christopheradams/ueberauth_flickr"
 
   def project do
     [app: :ueberauth_flickr,
-     version: "0.1.0",
+     version: @version,
      elixir: "~> 1.3 or ~> 1.4",
      elixirc_paths: elixirc_paths(Mix.env),
      build_embedded: Mix.env == :prod,
