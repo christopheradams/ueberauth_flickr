@@ -43,13 +43,18 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
     |> Flickrex.request!()
   end
 
-  def get_info(access_token) do
+  def get_info(access_token, opts \\ []) do
+    config =
+      opts
+      |> config()
+      |> put_access_token(access_token)
+
     params = [user_id: access_token.user_nsid]
 
     response =
       params
       |> Flickrex.Flickr.People.get_info()
-      |> Flickrex.request(access_token)
+      |> Flickrex.request(config)
 
     case response do
       {:ok, %{body: body}} ->
@@ -61,6 +66,15 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
 
   defp config(opts) do
     Keyword.merge(Application.get_env(:ueberauth, __MODULE__), opts)
+  end
+
+  defp put_access_token(config, access_token) do
+    tokens =
+      access_token
+      |> Map.take([:oauth_token, :oauth_token_secret])
+      |> Keyword.new()
+
+    Keyword.merge(config, tokens)
   end
 
   def request_token(opts \\ []) do

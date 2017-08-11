@@ -5,8 +5,8 @@ defmodule Ueberauth.Strategy.Flickr.OAuthTest do
 
   setup do
     Application.put_env :ueberauth, OAuth,
-      consumer_key: "consumer_key",
-      consumer_secret: "consumer_secret"
+      consumer_key: "CONSUMER_KEY",
+      consumer_secret: "CONSUMER_SECRET"
     :ok
   end
 
