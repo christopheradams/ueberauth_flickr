@@ -33,19 +33,30 @@ defmodule UeberauthFlickr.Support.MockHTTPClient do
     {:ok, %{status_code: status, headers: [], body: body}}
   end
 
-  def do_request("get", %{path: "/services/rest"} = _uri, _, _, _) do
-    body = """
-    {
-      "user": {
-        "id": "USERID",
-        "nsid": "NSID",
-        "username": {
-          "_content": "USERNAME"
-      }
-      },
-        "stat": "ok"
-    }
-    """
+  def do_request("get", %{path: "/services/rest"} = uri, _, _, _) do
+    query = URI.decode_query(uri.query)
+    oauth_token = query["oauth_token"]
+
+    body =
+      cond do
+        oauth_token != "TOKEN" ->
+          """
+          {"code": 98, "message": "Invalid auth token", "stat": "fail"}
+          """
+        true ->
+          """
+          {
+            "user": {
+              "id": "USERID",
+              "nsid": "NSID",
+              "username": {
+                "_content": "USERNAME"
+            }
+            },
+              "stat": "ok"
+          }
+          """
+      end
 
     {:ok, %{status_code: 200, headers: @json_headers, body: body}}
   end
