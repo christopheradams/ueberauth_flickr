@@ -12,7 +12,7 @@ defmodule UeberauthFlickr.Mixfile do
     [
       app: :ueberauth_flickr,
       version: @version,
-      elixir: "~> 1.3 or ~> 1.4",
+      elixir: "~> 1.4",
       elixirc_paths: elixirc_paths(Mix.env()),
       build_embedded: Mix.env() == :prod,
       start_permanent: Mix.env() == :prod,
@@ -25,7 +25,7 @@ defmodule UeberauthFlickr.Mixfile do
   end
 
   def application do
-    [applications: [:logger, :plug, :ueberauth, :flickrex]]
+    [extra_applications: [:logger]]
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
