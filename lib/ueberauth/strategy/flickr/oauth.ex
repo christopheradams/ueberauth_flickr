@@ -51,10 +51,10 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
       |> config()
       |> put_access_token(access_token)
 
-    params = [user_id: access_token.user_nsid]
+    user_id = access_token.user_nsid
 
     response =
-      params
+      user_id
       |> Flickrex.Flickr.People.get_info()
       |> Flickrex.request(config)
 
