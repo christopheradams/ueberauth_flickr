@@ -1,7 +1,7 @@
 use Mix.Config
 
 if Mix.env() == :test do
-  config :flickrex, :http_client, UeberauthFlickr.Support.MockHTTPClient
+  config :flickrex, :config, http_client: UeberauthFlickr.Support.MockHTTPClient
 
   config :ueberauth, Ueberauth,
     providers: [

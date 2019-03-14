@@ -11,7 +11,7 @@ defmodule UeberauthFlickr.Support.MockHTTPClient do
     do_request(method, URI.parse(url), body, headers, http_opts)
   end
 
-  def do_request("get", %{path: "/services/oauth/request_token"} = _uri, _, _, _) do
+  def do_request(:get, %{path: "/services/oauth/request_token"} = _uri, _, _, _) do
     status = 200
     headers = []
     body = "oauth_callback_confirmed=true&oauth_token=TOKEN&oauth_token_secret=TOKEN_SECRET"
@@ -19,7 +19,7 @@ defmodule UeberauthFlickr.Support.MockHTTPClient do
     {:ok, %{status_code: status, headers: headers, body: body}}
   end
 
-  def do_request("get", %{path: "/services/oauth/access_token"} = uri, _, _, _) do
+  def do_request(:get, %{path: "/services/oauth/access_token"} = uri, _, _, _) do
     query = URI.decode_query(uri.query)
 
     {status, body} =
@@ -35,7 +35,7 @@ defmodule UeberauthFlickr.Support.MockHTTPClient do
     {:ok, %{status_code: status, headers: [], body: body}}
   end
 
-  def do_request("get", %{path: "/services/rest"} = uri, _, _, _) do
+  def do_request(:get, %{path: "/services/rest"} = uri, _, _, _) do
     query = URI.decode_query(uri.query)
     oauth_token = query["oauth_token"]
 

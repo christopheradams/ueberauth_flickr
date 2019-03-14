@@ -35,7 +35,7 @@ defmodule UeberauthFlickr.Mixfile do
     [
       {:ueberauth, "~> 0.6"},
       {:ex_doc, ">= 0.0.0", only: :dev},
-      {:flickrex, "~> 0.4"}
+      {:flickrex, "~> 0.7"}
     ]
   end
 
