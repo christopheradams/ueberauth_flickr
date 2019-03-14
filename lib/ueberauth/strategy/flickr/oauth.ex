@@ -19,6 +19,7 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
     case response do
       {:ok, %{body: body}} ->
         {:ok, body}
+
       error ->
         error
     end
@@ -28,11 +29,12 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
     case access_token(token, secret, verifier, opts) do
       {:ok, token} ->
         token
+
       error ->
         raise RuntimeError, """
         UeberauthFlickr Error
 
-        #{inspect error}
+        #{inspect(error)}
         """
     end
   end
@@ -59,6 +61,7 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
     case response do
       {:ok, %{body: body}} ->
         {:ok, body}
+
       error ->
         error
     end
@@ -89,6 +92,7 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
     case response do
       {:ok, %{body: body}} ->
         {:ok, body}
+
       error ->
         error
     end
@@ -98,11 +102,12 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
     case request_token(opts) do
       {:ok, token} ->
         token
+
       error ->
         raise RuntimeError, """
         UeberauthFlickr Error
 
-        #{inspect error}
+        #{inspect(error)}
         """
     end
   end

@@ -26,8 +26,10 @@ defmodule UeberauthFlickr.Support.MockHTTPClient do
       case query["oauth_verifier"] do
         "BAD_VERIFIER" ->
           {400, "oauth_problem=parameter_absent&oauth_parameters_absent=oauth_callback"}
+
         _ ->
-          {200, "fullname=FULL%20NAME&oauth_token=TOKEN&oauth_token_secret=SECRET&user_nsid=NSID&username=USERNAME"}
+          {200,
+           "fullname=FULL%20NAME&oauth_token=TOKEN&oauth_token_secret=SECRET&user_nsid=NSID&username=USERNAME"}
       end
 
     {:ok, %{status_code: status, headers: [], body: body}}
@@ -43,6 +45,7 @@ defmodule UeberauthFlickr.Support.MockHTTPClient do
           """
           {"code": 98, "message": "Invalid auth token", "stat": "fail"}
           """
+
         true ->
           """
           {

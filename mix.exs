@@ -9,17 +9,19 @@ defmodule UeberauthFlickr.Mixfile do
   @source_url "https://github.com/christopheradams/ueberauth_flickr"
 
   def project do
-    [app: :ueberauth_flickr,
-     version: @version,
-     elixir: "~> 1.3 or ~> 1.4",
-     elixirc_paths: elixirc_paths(Mix.env),
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     docs: docs(),
-     description: @project_description,
-     source_url: @source_url,
-     package: package(),
-     deps: deps()]
+    [
+      app: :ueberauth_flickr,
+      version: @version,
+      elixir: "~> 1.3 or ~> 1.4",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      docs: docs(),
+      description: @project_description,
+      source_url: @source_url,
+      package: package(),
+      deps: deps()
+    ]
   end
 
   def application do
@@ -27,12 +29,14 @@ defmodule UeberauthFlickr.Mixfile do
   end
 
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
-    [{:ueberauth, "~> 0.2"},
-     {:ex_doc, ">= 0.0.0", only: :dev},
-     {:flickrex, "~> 0.4"}]
+    [
+      {:ueberauth, "~> 0.2"},
+      {:ex_doc, ">= 0.0.0", only: :dev},
+      {:flickrex, "~> 0.4"}
+    ]
   end
 
   defp docs() do
@@ -47,12 +51,12 @@ defmodule UeberauthFlickr.Mixfile do
 
   defp package do
     [
-     name: :ueberauth_flickr,
-     maintainers: ["Christopher Adams"],
-     licenses: ["MIT"],
-     links: %{
-       "GitHub" => @source_url
-     }
+      name: :ueberauth_flickr,
+      maintainers: ["Christopher Adams"],
+      licenses: ["MIT"],
+      links: %{
+        "GitHub" => @source_url
+      }
     ]
   end
 end

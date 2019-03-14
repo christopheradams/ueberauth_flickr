@@ -36,6 +36,7 @@ defmodule Ueberauth.Strategy.Flickr do
   """
   def handle_callback!(%Plug.Conn{params: %{"oauth_verifier" => oauth_verifier}} = conn) do
     request = get_session(conn, :flickr_request)
+
     case OAuth.access_token(request.oauth_token, request.oauth_token_secret, oauth_verifier) do
       {:ok, access_token} -> fetch_user(conn, access_token)
       {:error, reason} -> set_errors!(conn, [error("access_error", reason)])
@@ -110,6 +111,7 @@ defmodule Ueberauth.Strategy.Flickr do
         conn
         |> put_private(:flickr_user, person)
         |> put_private(:flickr_access, access_token)
+
       {:error, reason} ->
         set_errors!(conn, [error("get_info", reason)])
     end
