@@ -46,7 +46,7 @@ defmodule UeberauthFlickr.Support.MockHTTPClient do
           {"code": 98, "message": "Invalid auth token", "stat": "fail"}
           """
 
-        true ->
+        query["method"] == "flickr.people.getInfo" ->
           """
           {
             "user": {
