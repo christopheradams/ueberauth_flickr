@@ -4,10 +4,10 @@ defmodule Ueberauth.Strategy.Flickr.OAuth do
 
   Add `consumer_key` and `consumer_secret` to your configuration:
 
-  config :ueberauth, Ueberauth.Strategy.Flickr.OAuth,
-    consumer_key: System.get_env("FLICKR_CONSUMER_KEY"),
-    consumer_secret: System.get_env("FLICKR_CONSUMER_SECRET"),
-    redirect_uri: System.get_env("FLICKR_REDIRECT_URI")
+      config :ueberauth, Ueberauth.Strategy.Flickr.OAuth,
+        consumer_key: System.get_env("FLICKR_CONSUMER_KEY"),
+        consumer_secret: System.get_env("FLICKR_CONSUMER_SECRET"),
+        redirect_uri: System.get_env("FLICKR_REDIRECT_URI")
   """
 
   def access_token(token, secret, verifier, opts \\ []) do
