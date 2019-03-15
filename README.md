@@ -52,10 +52,7 @@ _Note_: Sessions are required for this strategy.
     defmodule MyApp.AuthController do
       use MyApp.Web, :controller
 
-      pipeline :browser do
-        plug Ueberauth
-        ...
-       end
+      plug Ueberauth
     end
     ```
 
