@@ -4,9 +4,11 @@
 
 _Note_: Sessions are required for this strategy.
 
-[Documentation for Überauth Flickr is available on hexdocs](http://hexdocs.pm/ueberauth_flickr/).<br/>
-[Source code is available on Github](https://github.com/christopheradams/ueberauth_flickr).<br/>
-[Package is available on hex](https://hex.pm/packages/ueberauth_flickr).
+Install the latest version of Überauth Flickr from [https://hex.pm/packages/ueberauth_flickr](https://hex.pm/packages/ueberauth_flickr)
+
+Documentation is available at [http://hexdocs.pm/ueberauth_flickr](http://hexdocs.pm/ueberauth_flickr)
+
+Source code is available at [https://github.com/christopheradams/ueberauth_flickr](https://github.com/christopheradams/ueberauth_flickr)
 
 ## Installation
 
