@@ -5,7 +5,7 @@ defmodule UeberauthFlickr.Mixfile do
   Flickr strategy for Überauth
   """
 
-  @version "0.3.0"
+  @version "0.3.1"
   @source_url "https://github.com/christopheradams/ueberauth_flickr"
 
   def project do
